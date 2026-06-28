@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kallix - Anonymní volání</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --accent: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(255,255,255,0.06) 0%, transparent 50%);
+            animation: bgShift 30s ease infinite;
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        @keyframes bgShift {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 20px); }
+            100% { transform: translate(0, 0); }
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,%3Csvg width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%221.5%22 fill=%22%23fff%22 fill-opacity=%220.15%22/%3E%3C/svg%22') repeat;
+            animation: grid 40s linear infinite;
+            opacity: 0.4;
+        }
+        
+        @keyframes grid {
+            0% { background-position: 0 0; }
+            100% { background-position: 120px 120px; }
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            z-index: 2;
+        }
+        
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .logo-circle {
+            width: 92px;
+            height: 92px;
+            background: #000;
+            border: 3px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+            font-weight: 700;
+            color: var(--accent);
+            box-shadow: 0 0 80px rgba(255,255,255,0.6);
+            animation: logoPulse 4s infinite ease-in-out;
+        }
+        
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 80px rgba(255,255,255,0.6); }
+            50% { transform: scale(1.08); box-shadow: 0 0 120px rgba(255,255,255,0.85); }
+        }
+        
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5.2rem;
+            font-weight: 600;
+            letter-spacing: -4px;
+            margin-bottom: 16px;
+            background: linear-gradient(90deg, #fff, #ddd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 6s ease infinite;
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.95; }
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            color: #bbb;
+            max-width: 620px;
+            margin: 0 auto 60px;
+            line-height: 1.45;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 18px 52px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #000;
+            background: var(--accent);
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 40%;
+            height: 300%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+            transform: skewX(-25deg);
+            animation: shine 4s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-150%) skewX(-25deg); }
+            20% { transform: translateX(300%) skewX(-25deg); }
+            100% { transform: translateX(300%) skewX(-25deg); }
+        }
+        
+        .btn:hover {
+            transform: translateY(-6px) scale(1.06);
+            box-shadow: 0 25px 60px rgba(255,255,255,0.4);
+        }
+        
+        .stats {
+            margin-top: 50px;
+            font-size: 1.35rem;
+            color: #aaa;
+            font-weight: 500;
+        }
+        
+        .section {
+            padding: 130px 0;
+        }
+        
+        .features {
+            background: #111;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 40px;
+            margin-top: 70px;
+        }
+        
+        .card {
+            background: #1a1a1a;
+            border-radius: 24px;
+            padding: 48px 36px;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid #222;
+        }
+        
+        .card:hover {
+            transform: translateY(-20px) scale(1.02);
+            border-color: #555;
+            box-shadow: 0 30px 70px rgba(255,255,255,0.08);
+        }
+        
+        .download-section {
+            background: linear-gradient(135deg, #111, #1a1a1a);
+        }
+        
+        .download-card {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 28px;
+            padding: 80px 60px;
+            max-width: 620px;
+            margin: 0 auto;
+            box-shadow: 0 0 100px rgba(0,0,0,0.9);
+        }
+        
+        .download-card h2 {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            color: white;
+        }
+        
+        .download-card .subtitle {
+            color: #aaa;
+            margin-bottom: 60px;
+            font-size: 1.1rem;
+        }
+        
+        .download-btn {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto 70px;
+            padding: 22px 40px;
+            background: white;
+            color: black;
+            font-size: 1.35rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 15px 40px rgba(255,255,255,0.35);
+        }
+        
+        .password-label {
+            color: #777;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        
+        .password-box {
+            background: #111;
+            padding: 18px 40px;
+            border-radius: 16px;
+            font-family: monospace;
+            font-size: 1.55rem;
+            letter-spacing: 8px;
+            color: #fff;
+            display: inline-block;
+            margin-bottom: 60px;
+        }
+        
+        .note {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        footer {
+            padding: 70px 0 40px;
+            text-align: center;
+            border-top: 1px solid #222;
+            font-size: 0.95rem;
+            color: #555;
+        }
+        
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 22px 0;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .nav.scrolled {
+            background: rgba(10, 10, 10, 0.97);
+            backdrop-filter: blur(16px);
+            padding: 16px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+        
+        .nav a {
+            transition: color 0.3s ease;
+        }
+        
+        .nav a:hover {
+            color: var(--accent) !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav" id="nav">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 12px; color: white; font-weight: 600;">
+                <div style="width: 32px; height: 32px; background: #000; border: 2px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700;">K</div>
+                Kallix
+            </div>
+            <div style="display: flex; gap: 40px; font-weight: 500;">
+                <a href="#funkce" class="nav-link">Funkce</a>
+                <a href="#stahnout" class="nav-link">Stáhnout</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="particles" id="particles"></div>
+        
+        <div class="container">
+            <div class="logo">
+                <div class="logo-circle">K</div>
+            </div>
+            <h1>Kallix</h1>
+            <p class="tagline">Plně anonymní volání přes internet. Zcela zdarma</p>
+            
+            <a href="#stahnout" class="btn nav-link">Stáhnout nyní</a>
+            
+            <div class="stats">
+                750+ tisíc stažení
+            </div>
+        </div>
+    </section>
+
+    <section class="section features" id="funkce">
+        <div class="container">
+            <h2 style="font-size: 2.9rem; text-align: center; margin-bottom: 24px;">Proč Kallix</h2>
+            <p style="text-align: center; max-width: 580px; margin: 0 auto 80px; color: #888;">Jednoduchý. Bezpečný. Žádné sledování.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3 style="font-size: 1.65rem; margin-bottom: 18px;">Plná anonymita</h3>
+                    <p style="color: #aaa; line-height: 1.75;">Žádné registrace. Žádné telefonní číslo. Žádné osobní údaje.</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 1.65rem; margin-bottom: 18px;">Kvalitní zvuk</h3>
+                    <p style="color: #aaa; line-height: 1.75;">Krystalicky čistý zvuk s minimální latencí.</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 1.65rem; margin-bottom: 18px;">Zdarma navždy</h3>
+                    <p style="color: #aaa; line-height: 1.75;">Žádné skryté poplatky. Žádné limity na délku hovoru.</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 1.65rem; margin-bottom: 18px;">Šifrované</h3>
+                    <p style="color: #aaa; line-height: 1.75;">End-to-end šifrování. Vaše hovory zůstanou soukromé.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section download-section" id="stahnout">
+        <div class="container">
+            <div class="download-card">
+                <h2>Stáhnout Kallix</h2>
+                <p class="subtitle">Kompatibilní s Windows 10 a Windows 11</p>
+                
+                <a href="https://www.example.com" target="_blank" class="download-btn">Stáhnout ZIP (64-bit)</a>
+                
+                <div class="password-label">Heslo pro archiv:</div>
+                <div class="password-box">k a l l i x</div>
+                
+                <div class="note">Po rozbalení spusťte Kallix.exe</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            © 2019 Kalli-Studios. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for all navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    if (targetSection) {
+                        const navHeight = document.querySelector('.nav').offsetHeight;
+                        const targetPosition = targetSection.getBoundingClientRect().top + window.scrollY;
+                        
+                        window.scrollTo({
+                            top: targetPosition - navHeight - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Navigation scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav');
+            if (window.scrollY > 80) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+        
+        // Background particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            const size = Math.random() * 4 + 2;
+            particle.style.position = 'absolute';
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.background = 'rgba(255,255,255,0.75)';
+            particle.style.borderRadius = '50%';
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+            particle.style.opacity = Math.random() * 0.6 + 0.3;
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '1';
+            
+            document.getElementById('particles').appendChild(particle);
+            
+            const duration = Math.random() * 35 + 25;
+            particle.animate([
+                { transform: 'translateY(0) scale(1)', opacity: particle.style.opacity },
+                { transform: `translateY(-${window.innerHeight * 1.2}px) scale(0.6)`, opacity: 0 }
+            ], {
+                duration: duration * 1000,
+                easing: 'linear'
+            });
+            
+            setTimeout(() => particle.remove(), duration * 1000 + 100);
+        }
+        
+        // Create particles
+        setInterval(() => {
+            if (Math.random() > 0.3) createParticle();
+        }, 80);
+        
+        // Initial particles
+        for (let i = 0; i < 18; i++) {
+            setTimeout(createParticle, i * 60);
+        }
+        
+        // Favicon
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.type = 'image/svg+xml';
+        link.href = 'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27100%27 height=%27100%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2745%27 fill=%27%23000%27 stroke=%27%23fff%27 stroke-width=%278%27/%3E%3Ctext x=%2750%27 y=%2765%27 font-size=%2770%27 text-anchor=%27middle%27 fill=%27%23fff%27 font-weight=%27700%27%3EK%3C/text%3E%3C/svg%3E';
+        document.head.appendChild(link);
+    </script>
+</body>
+</html>
